@@ -217,6 +217,7 @@ class TreatBasket extends GetView<TreatBasketController> {
 
                         else
                         {
+
                           return AwesomeDialog(
                               context: context,
                               dialogType: DialogType.QUESTION,
@@ -237,6 +238,7 @@ class TreatBasket extends GetView<TreatBasketController> {
                                 ListInt.elementAt(0).delivery_time = _selectedDate.toString() ;
                                 await controller.AddOrder();
                                 for (int i = 0; i < ListInt.length; i++) {
+
                                   await controller.AddOrderProduct(
                                       product_id: ListInt.elementAt(i).product_id,
                                       order_id:
@@ -282,42 +284,3 @@ class TreatBasket extends GetView<TreatBasketController> {
 
 
 
-
-
-
-
-// Expanded(flex:1,child:  Flexible(child:
-//                                                        Text("الوقت المتوقع للرد على الطلب",style: TextStyle(fontSize: 20),),),),
-//                                                        Expanded(flex:2,child:  Container(
-//                                                          child:
-//                                                          Column(
-//                                                            children: <Widget>[
-//                                                              DatePickerWidget(
-//                                                                looping: false, // default is not looping
-//                                                                firstDate: DateTime(2022, 01, 01),
-//                                                                lastDate: DateTime(2030, 1, 1),
-//                                                                initialDate: DateTime(2022, 10, 12),
-//
-//                                                                dateFormat: "dd-MMM-yyyy",
-//                                                                locale: DatePicker.localeFromString('en'),
-//                                                                onChange: (DateTime newDate, _) =>
-//                                                                _selectedDate = newDate,
-//                                                                pickerTheme: const DateTimePickerTheme(
-//                                                                  itemTextStyle:
-//                                                                  TextStyle(color: Colors.black, fontSize: 20),
-//                                                                  dividerColor: Colors.blue,
-//                                                                ),
-//                                                              ),
-//
-//                                                              TextButton(
-//                                                                onPressed: ()async{
-//                                                                  // print('current_date: $_selectedDate');
-//                                                                  //
-//                                                                  // await AuthServices.Deleverytime(order_id: controller.ListCArt.elementAt(index).order_id, date:  _selectedDate);
-//                                                                  //
-//                                                                  // Get.snackbar("تم الارسال بنجاح ", "");
-//                                                                },
-//                                                                child: const Text('ارسال'),),
-//
-//                                                            ],),
-//                                                        ),)

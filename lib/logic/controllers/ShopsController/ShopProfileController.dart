@@ -64,8 +64,7 @@ class ShopProfileController extends GetxController {
         headers: {'Content-Type': 'application/json',
           'Accept': 'application/json', 'Authorization': 'Bearer $token'});
 
-    print(response.body);
-    print(favourite.body) ;
+
     if (response.statusCode == 200 && favourite.statusCode == 200) {
       ShopModel shopModel = ShopModel.fromJson(jsonDecode(response.body));
 
@@ -78,7 +77,7 @@ class ShopProfileController extends GetxController {
           email: shopModel.data[0].email,
           facebook: shopModel.data[0].facebook,
           num_of_salling: shopModel.data[0].num_of_salling,
-          all_review: shopModel.data[0].all_review , review: shopModel.data[0].review , area: shopModel.data[0].area);
+          all_review: shopModel.data[0].all_review , review: shopModel.data[0].review , area: shopModel.data[0].area, brand: shopModel.data[0].brand);
       await my_products();
 
       if (favourite.body == "1") {

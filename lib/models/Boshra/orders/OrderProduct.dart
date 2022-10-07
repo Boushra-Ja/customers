@@ -1,11 +1,18 @@
 
 
+import 'dart:collection';
+
+import '../products/Option.dart';
+
 class OrderProduct{
 
   int product_id   , store_id   , order_id , order_product_id , status_id;
   String store_name , store_image , delivery_time , order_time , product_name , product_image;
   var gift_order , amount ;
-
+  Map<String , List<Option>> options = HashMap() ;
+  List<int> selected_values = [];
+  List<String> selected_option = [];
+  List<int>opt_prod_ids = [] ;
 
   factory OrderProduct.fromJson(Map<String , dynamic> json)
   {

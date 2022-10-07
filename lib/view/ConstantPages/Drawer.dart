@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import '../../logic/controllers/DrawerController/SettingPageController.dart';
+import '../../logic/controllers/products/ProductController.dart';
 import '../../utls/Themes.dart';
 import '../DrawerPages/GiftRequest.dart';
 import '../DrawerPages/Notifications.dart';
@@ -9,10 +10,9 @@ import '../DrawerPages/ReportPage.dart';
 import '../DrawerPages/SettingPage.dart';
 import '../DrawerPages/ShowDiscounts.dart';
 import '../auth/LoginView.dart';
-import '../chatting/Chat.dart';
 
 class myDrawer extends GetView<SettingPageController> {
-
+  final controllerp = Get.put(ProductController());
   @override
   Widget build(BuildContext context) {
     var storage = const FlutterSecureStorage();
@@ -70,11 +70,20 @@ class myDrawer extends GetView<SettingPageController> {
               ),
               ListTile(
                 leading: Icon(Icons.chat),
-                title:  Text('المحادثات', style: Themes.subtitle2
-                  // Themes.bodyText1,
+                title:  Row(
+                  children: [
+
+                    Text('المحادثات', style: Themes.subtitle2),
+                    SizedBox(width: 30,),
+                    CircleAvatar(child: Text("${controllerp.i.value}",style: TextStyle(color: Colors.black),),backgroundColor: Themes.color2,)
+
+                  ],
+
+
                 ),
                 onTap: () {
-                  Get.to(Chat()) ;
+                  Get.toNamed('/chatting');
+                  controllerp.i.value=0;
 
                 },
               ),
@@ -116,9 +125,7 @@ class myDrawer extends GetView<SettingPageController> {
                 onTap: ()async {
                   await(storage.deleteAll());
                   Get.off(LoginView()) ;
-
-                  //Get.to(mazad());
-                },
+                  },
               ),
             ],
           ),),),

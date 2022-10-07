@@ -1,14 +1,12 @@
 import 'dart:developer';
-
-import 'package:bubble/bubble.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:pusher_client/pusher_client.dart';
 
 import '../../../main.dart';
 import '../../../view/notificationApi.dart';
+import '../products/ProductController.dart';
+
 class SingltoneNotification  extends GetxController{
 
   static final SingltoneNotification _SingltonePusher =
@@ -22,7 +20,7 @@ class SingltoneNotification  extends GetxController{
   PusherClient? pusher;
   Channel? channel;
 
-int i=0;
+
 
   initPusher() {
     PusherOptions options = PusherOptions(
@@ -34,28 +32,36 @@ int i=0;
     );
   }
 
-  void subscribePusher(sender_id) {
+  void subscribePusher(sender) {
+    final controller = Get.put(ProductController());
 
-    print(sender_id);
     print("=====sender=======");
     print(sender_id);
+    print(sender);
+
     print("=====sender=======");
     channel = pusher!.subscribe("public-channel.${sender_id}");
     pusher!.onConnectionStateChange((state) {
-    //  log("previousState: ${state!.previousState}, currentState: ${state.currentState}");
+      log("previousState: ${state!.previousState}, currentState: ${state.currentState}");
     });
     pusher!.onConnectionError((error) {
-    //  log("error: ${error!.message}");
+      log("error: ${error!.message}");
     });
     channel!.bind("NotificationEvent", (last) {
 
       final data = json.decode(last!.data.toString());
-      NotificationApi.showNotification( id:i++  ,
-          body:data['message'],
-          title:data["title"] ,);
+      if(data["message"]!='chat' && data["title"]!='title')
+        NotificationApi.showNotification(id:1 ,payload:"sdsgdg" ,body:data['message'],title:data['title'] );
+      else {
+        controller.i.value++;
+      }
       if (last.data != null) {
 
-        print(data);
+        print(data["message"]);
+        print(data["title"]);
+        print(controller.i.value);
+
+
 
       }
     });
@@ -74,9 +80,11 @@ int i=0;
 
 
   inti() async {
-    sender_id.value=(await storage.read(key: 'id'))!;
-    print(sender_id.value);
 
+
+    sender_id.value=(await storage.read(key: 'id'))!;
+
+    print(sender_id.value);
     SingltoneNotification().initPusher();
     SingltoneNotification().connectPusher();
     SingltoneNotification().subscribePusher(sender_id.value);
@@ -84,7 +92,6 @@ int i=0;
 
   @override
   void onInit() {
-    inti();
 
 
   }

@@ -49,7 +49,6 @@ class CartController extends GetxController {
 
         }
       }
-
     }
   }
 
@@ -99,12 +98,6 @@ class CartController extends GetxController {
 
 
         model.selling_after_dis = model.discount_value != 0 ? (model.selling_price - (model.selling_price*model.discount_value/100)).toInt() : model.selling_price;
-
-        print("____________________");
-        print(model.selling_price);
-        print( model.discount_value) ;
-        print( model.selling_after_dis) ;
-        print("____________________");
 
 
         if (map1.containsKey(model.store_id)) {

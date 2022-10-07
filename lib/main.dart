@@ -23,7 +23,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
 
-  static String api = "http://192.168.1.104:8000" ;
+  static String api = "http://192.168.43.188:8000" ;
 
   @override
   Widget build(BuildContext context) {

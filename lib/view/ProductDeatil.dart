@@ -5,10 +5,12 @@ import '../logic/controllers/products/ProductDeatilController.dart';
 import '../logic/controllers/products/RatingProductController.dart';
 import '../main.dart';
 import '../models/Boshra/products/Option.dart';
+import '../services/auth_services.dart';
 import '../utls/Themes.dart';
 import 'EvaluationDialoge.dart';
 import 'Seggestions.dart';
 import 'ShopsPages/ShopProfile.dart';
+import 'package:http/http.dart' as http;
 
 class ProductDeatil extends GetView<ProductDeatilController> {
   var id;
@@ -397,8 +399,34 @@ class ProductDeatil extends GetView<ProductDeatilController> {
 
 
                                 ),
-                                onPressed: () {},
+                                  onPressed: () async {
+                                    var response = await http.get(Uri.parse(
+                                        '${MyApp.api}/api/batool/${controller
+                                            .product.store_id.toString()}'));
+                                    print(response.body);
 
+
+                                    await AuthServices.startChat(
+                                      message: "",
+                                      sender_id: await storage.read(key: 'id'),
+                                      receiver_id: response.body,
+
+                                    );
+
+                                    var chat_id =
+                                    await http.get(Uri.parse(
+                                        '${MyApp.api}/api/chatt/${controller
+                                            .user_id}/${response.body}'));
+
+
+                                    Get.toNamed('/ChatDetails', arguments: {
+                                      "name": controller.product.store_name
+                                          .toString(),
+                                      "chat_id": chat_id.body,
+                                      "receiver_id": response.body,
+                                      "image": controller.product.image,
+                                    });
+                                  },
 
                                 child: Icon(Icons.send,
                                   color: Themes.borderColor,)),

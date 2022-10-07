@@ -19,6 +19,7 @@ class OrdersController extends GetxController {
 
   void setindex(int val) {
     index.value = val;
+    update();
   }
 
   Future<void> Fetch_AcceptOrders() async {
@@ -39,6 +40,7 @@ class OrdersController extends GetxController {
       for (int i = 0; i < orderModel.data.length; i++) {
         if (!acceptence_orders.containsKey(orderModel.data[i].order_id)) {
           acceptence_orders[orderModel.data[i].order_id] = orderModel.data[i];
+
         }
       }
     }
@@ -87,8 +89,10 @@ class OrdersController extends GetxController {
           recieved_orders[orderModel.data[i].order_id] = orderModel.data[i];
         }
       }
-      isLoading.value = false;
     }
+    isLoading.value = false;
+    update() ;
+
   }
 
   @override

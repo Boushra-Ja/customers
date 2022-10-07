@@ -1,22 +1,25 @@
-import 'package:customers/view/Carts.dart';
-import 'package:customers/view/chatting/ChatDetails.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../logic/binding/ChatBinding.dart';
 import '../logic/binding/Favorite_Binding.dart';
 import '../logic/binding/Home_Binding.dart';
+import '../logic/binding/MazadBinding.dart';
 import '../logic/binding/OrderBinding.dart';
 import '../logic/binding/Regester_Binding.dart';
 import '../logic/binding/SplashBinding.dart';
 import '../logic/binding/TreatBinding.dart';
 import '../logic/binding/login_Binding.dart';
+import '../view/Carts.dart';
 import '../view/Favorite.dart';
 import '../view/HomePage.dart';
+import '../view/Mazad.dart';
 import '../view/ShopsPages/ShopsPage.dart';
 import '../view/TreatBasket.dart';
 import '../view/auth/LoginView.dart';
 import '../view/auth/RegesterView.dart';
 import '../view/auth/Splash.dart';
 import '../view/auth/WelcomPage.dart';
+import '../view/chatting/Chat.dart';
+import '../view/chatting/ChatDetails.dart';
 
 class AppPages {
   static final routes = [
@@ -26,17 +29,17 @@ class AppPages {
         binding: HomeBinding()
     ),
     GetPage(
-      name: Routes.Regester,
-      page: () => RegisterView(),
+        name: Routes.Regester,
+        page: () => RegisterView(),
         binding: RegisterBinding()
     ),
     GetPage(
-      name: Routes.Login,
-      page: () => LoginView(),
+        name: Routes.Login,
+        page: () => LoginView(),
         binding: LoginBinding()
     ), GetPage(
-      name: Routes.TreatBasket,
-      page: () => TreatBasket(),
+        name: Routes.TreatBasket,
+        page: () => TreatBasket(),
         binding: TreatBinding()
     ),
     GetPage(
@@ -52,7 +55,6 @@ class AppPages {
       name: Routes.ChatDetails,
       page: () => ChatDetails(),
       binding: ChatBinding(),
-
     ),
     GetPage(
       name: Routes.Splash,
@@ -68,6 +70,12 @@ class AppPages {
       name: Routes.WelcomPage,
       page: () => WelcomPage(),
     ),
+    GetPage(
+      name: Routes.chatting,
+      page: () => Chat(),
+      binding: ChatBinding(),
+    ),
+
   ];
 }
 
@@ -83,6 +91,7 @@ class Routes {
   static const ChatDetails = '/ChatDetails';
   static const ShopsProfile = '/shops_profile';
   static const WelcomPage = '/welcom_page';
+  static const chatting = '/chatting';
 
 
 

@@ -96,7 +96,7 @@ class Favorite extends GetView<FavoriteController> {
                                                               icon:  Icon(Icons.search ,  color: Themes.color3,
                                                               ),
                                                             ),
-                                                            Text(" انقر هنا للبحث ..."),
+                                                            Text(" انقر هنا للبحث ..." , style: Themes.subtitle2,),
                                                           ]),
                                                         ),
 

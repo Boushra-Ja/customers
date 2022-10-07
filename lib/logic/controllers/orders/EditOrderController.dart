@@ -12,8 +12,6 @@ class EditOrderController extends GetxController{
 
   int order_id , status_id ;
   var isLoading = true.obs , token ;
-  Map<int, Map<String, List<Option>>> options = HashMap();
-  Map<int  , List<Option>> selected_options = <int  , List<Option>>{}.obs;
   List<OrderProduct> order_products = <OrderProduct>[].obs ;
   List<GlobalKey<FormState>> formstate = <GlobalKey<FormState>>[];
   final storage=const FlutterSecureStorage();
@@ -37,8 +35,8 @@ class EditOrderController extends GetxController{
 
       for(int i = 0 ; i < order_products.length ; i++)
         {
-          await get_all_options(order_products.elementAt(i).product_id) ;
-          await fetchOptions_selected(order_products.elementAt(i).order_product_id) ;
+          await get_all_options(i , order_products.elementAt(i).product_id) ;
+          await fetchOptions_selected(order_products.elementAt(i).order_product_id , i) ;
         }
     }
     else
@@ -53,31 +51,30 @@ class EditOrderController extends GetxController{
 
   EditOrderController(this.order_id , this.status_id ) ;
 
-  void change_value(var val , int order_product_id , int index) {
-    selected_options[order_product_id]?.elementAt(index).value_id = val.value_id;
+  void change_value(var val , int order_product_id , int index , int i ) {
+    order_products.elementAt(i).selected_values[index] = val.value_id;
+
   }
 
-  Future<void> fetchOptions_selected(int order_product_id) async {
+  Future<void> fetchOptions_selected(int order_product_id , int i) async {
 
       final response = await http.get(Uri.parse(
           '${MyApp.api}/api/order_product/options/${order_product_id}'),headers: {'Content-Type': 'application/json',
         'Accept': 'application/json', 'Authorization': 'Bearer $token'},);
       if (response.statusCode == 200) {
         OptionModel optionModel = OptionModel.fromJson(jsonDecode(response.body));
+
         for(int k =  0 ; k < optionModel.data.length ; k++)
         {
-          if(selected_options.containsKey(order_product_id))
-            selected_options[order_product_id]?.add(optionModel.data[k]);
-          else
-            selected_options[order_product_id] =  [optionModel.data[k]] ;
-
-
+          order_products.elementAt(i).selected_values.add(optionModel.data[k].value_id);
+          order_products.elementAt(i).selected_option.add(optionModel.data[k].value);
+          order_products.elementAt(i).opt_prod_ids.add(optionModel.data[k].product_options_id);
         }
       }
 
   }
 
-  Future<void> get_all_options(int product_id) async {
+  Future<void> get_all_options(int i , product_id) async {
 
     Map <String, List<Option>>temp = new HashMap();
 
@@ -96,32 +93,29 @@ class EditOrderController extends GetxController{
             temp['${optionModel.data[j].name}'] = [optionModel.data[j]];
           }
         }
-        options[product_id] = temp;
+        order_products[i].options = temp ;
 
       }
-
-        print(options);
-
+        print(order_products[i].options);
   }
 
-  Future<void> edit_options(int order_product_id)async{
+  Future<void> edit_options(int order_product_id , int i)async{
 
-    if(selected_options.containsKey(order_product_id)){
-      for(int j = 0 ; j < selected_options[order_product_id]!.length ; j++)
+      for(int j = 0 ; j < order_products.elementAt(i).opt_prod_ids.length ; j++)
       {
         final response = await http.post(
-            Uri.parse('${MyApp.api}/api/orderproduct/update/${selected_options[order_product_id]?.elementAt(j).product_options_id}'),
+            Uri.parse('${MyApp.api}/api/edit/option_product/${order_products.elementAt(i).opt_prod_ids.elementAt(j)}'),
             headers: {'Content-Type': 'application/json',
               'Accept': 'application/json', 'Authorization': 'Bearer $token'},
             body: jsonEncode(<String, dynamic>{
-              'option_values_id' : selected_options[order_product_id]?.elementAt(j).value_id
+              'option_values_id' : order_products.elementAt(i).selected_values.elementAt(j)
             }));
 
-        if (response.statusCode == 200) {
-          print('success') ;
-        }
+        if(response.statusCode == 200)
+          {
+            print('success22') ;
+          }
       }
-    }
   }
 
   Future<void> delete_product(int order_prod_id)async{
@@ -157,11 +151,12 @@ class EditOrderController extends GetxController{
 
     if(response.statusCode == 200)
       {
-        print('success') ;
-        Get.snackbar("تم تعديل الطلب", "") ;
+         edit_options(int.parse(response.body) , ind) ;
+         Get.snackbar("تم تعديل الطلب", "") ;
       }
 
   }
+
   @override
   void onInit() async{
     token  = await storage.read(key: 'token') ;

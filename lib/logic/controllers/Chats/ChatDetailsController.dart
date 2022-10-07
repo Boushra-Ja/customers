@@ -3,9 +3,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
-import 'package:pusher_client/pusher_client.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 
 import '../../../main.dart';
 import '../../../models/batool/ChatDetailsModel.dart';
@@ -17,10 +15,11 @@ class ChatDetailsController extends GetxController {
   final controller = Get.put(SingltonePusher());
 
   var sender_id=''.obs;
-  int i=1;
+  var i=1.obs;
   var listmessage = <ChatDetails>[].obs ;
   late List<dynamic> jsonResponse;
   var chat_id=''.obs;
+  var image=''.obs;
   var name=''.obs;
   var receiver_id=''.obs;
   String? _message;
@@ -40,25 +39,11 @@ class ChatDetailsController extends GetxController {
         mainAxisAlignment:
         data == 1 ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          // data == 0
-          //     ? Container(
-          //       height: 50,
-          //       width: 60,
-          //       child: CircleAvatar(
-          //         radius: 10,
-          //     //  backgroundImage: AssetImage("${controller.Images.value}" ),
-          //   ),
-          // )
-          //     : Container(),
-          //
-
-
-
           Padding(
 
             padding: EdgeInsets.all(10.0),
             child: Bubble(
-               // radius: Radius.circular(80.0),
+              // radius: Radius.circular(80.0),
                 color: data == 0 ? Colors.purple.shade200 : Colors.teal.shade200,
                 elevation: 0.0,
                 child: Padding(
@@ -84,18 +69,6 @@ class ChatDetailsController extends GetxController {
             ),
           ),
 
-
-          //
-          // data == 1
-          //     ? Container(
-          //   height: 50,
-          //   width: 60,
-          //   child: CircleAvatar(
-          //     radius: 5,
-          //     backgroundImage: AssetImage("images/3.jpg"),
-          //   ),
-          // )
-          //     : Container(),
         ],
       ),
     );
@@ -112,12 +85,16 @@ class ChatDetailsController extends GetxController {
     chat_id.value=Get.arguments['chat_id'];
     name.value=Get.arguments['name'];
     receiver_id.value=  Get.arguments['receiver_id'];
+    image.value=  Get.arguments['image'];
     print( receiver_id.value);
     print( chat_id.value);
     //
     ChatDetail(chat_id.value);
 
     controller.inti(receiver_id.value);
+    // i.value=i.value+1;
+    // update();
+
 
   }
 
@@ -139,7 +116,7 @@ class ChatDetailsController extends GetxController {
     else
       result= null;
 
-   // ChatDetailsModel productModel = ChatDetailsModel.fromJson(jsonDecode(response.body));
+    // ChatDetailsModel productModel = ChatDetailsModel.fromJson(jsonDecode(response.body));
     listmessage.assignAll(result);
     update();
 

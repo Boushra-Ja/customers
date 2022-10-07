@@ -1,28 +1,62 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import '../../../main.dart';
+import 'SingltoneMazad.dart';
 
-class MazadController extends GetxController{
-
-  var select_smile = 3.obs ;
-  var product_id , isRate = false ;
-  String notes = "";
-  final storage=const FlutterSecureStorage();
-
-
-  void set_select_smile(var val)
-  {
-    select_smile.value = val;
+class MazadController extends GetxController {
+  var name=''.obs;
+  MazadController();
+  final controller = Get.put(SingltoneMazad());
+  var count= 0.obs;
+  var counter= 30.obs;
+  late Timer _timer;
+  final messageInsert = TextEditingController();
+  List<Map> messsages = [];
+  d()async{
+    name.value=   (await storage.read(key: 'name'))! ;
+    // print("===============================================");
+    // print(name.value);
+    // print("===============================================");
   }
+  void starttime(){
+
+    controller.initPusher();
+    controller.connectPusher();
+    controller.subscribePusher();
+    _timer=Timer.periodic(Duration(seconds: 1), (timer) {
+      if(counter>0){
+        counter--;
+        update();
 
 
+      }
+      else
+      {
+
+        _timer.cancel();
+        update();
+      }
+
+
+
+    });
+
+
+  }
 
   @override
   void onInit() {
-    super.onInit();
+    // messsages[0]['number']=0;
+
+
+    d();
+
+    starttime();
   }
-}
+
+  void dispose() {
+    controller.disconnectPusher();
+
+  }}

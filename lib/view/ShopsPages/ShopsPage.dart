@@ -269,7 +269,7 @@ class ShopsPage extends StatelessWidget {
                                                       radius: 50,
                                                       backgroundImage:
                                                       NetworkImage(
-                                                          '${MyApp.api}/uploads/stores/${_controller.ShopList.elementAt(index).image}'),
+                                                          '${MyApp.api}/uploads/stores/${_controller.ShopList.elementAt(index).brand}'),
                                                     ),
                                                   ),
                                                   Column(

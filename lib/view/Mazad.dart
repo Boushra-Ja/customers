@@ -2,79 +2,101 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
+import '../logic/controllers/Notification/MazadController.dart';
+import '../logic/controllers/Notification/SingltoneMazad.dart';
+import '../main.dart';
+import '../services/auth_services.dart';
 import '../utls/Themes.dart';
 import 'ConstantPages/MyCustomCLipper.dart';
 
-class mazad extends StatefulWidget {
-  @override
-  _mazadState createState() => _mazadState();
-}
+class Mazad extends GetView<MazadController> {
 
-class _mazadState extends State<mazad> with TickerProviderStateMixin {
-  int _counter = 0;
-  late AnimationController _controller;
-  int levelClock = 15;
+  final controller = Get.put(MazadController());
+  Widget mazad(String name,int number, int data ) {
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Card(
+        child: ListTile(
+          title:Row(
+              mainAxisAlignment:
+              data == 1 ? MainAxisAlignment.end : MainAxisAlignment.start,
+              children: [
+
+
+
+
+
+                Text("${name}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),]),
+          subtitle: Row(
+            mainAxisAlignment:
+            data == 1 ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+
+
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Bubble(
+                    radius: Radius.circular(15.0),
+                    color: data == 0 ? Colors.red : Colors.teal,
+                    elevation: 0.0,
+                    child: Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Flexible(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: 200),
+                                child: Text(
+                                  '${number}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ))
+                        ],
+                      ),
+                    )),
+              ),
+
+
+            ],
+          ),
+          // leading: CircleAvatar(
+          //   radius: 40,
+          //   backgroundImage: AssetImage("images/jk.jpg"),
+          // ),
+        ),
+      ),
+    );
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-        vsync: this,
-        duration: Duration(
-            seconds:
-                levelClock));
-
-    _controller.forward();
-  }
+   int  raise_id ;
+  Mazad(this.raise_id) ;
 
   @override
   Widget build(BuildContext context) {
-    return Countdown(
-        animation: StepTween(
-      begin: levelClock, // THIS IS A USER ENTERED NUMBER
-      end: 0,
-    ).animate(_controller));
-  }
-}
 
-class Countdown extends AnimatedWidget {
-  Countdown({Key? key, required this.animation})
-      : super(key: key, listenable: animation);
-  Animation<int> animation;
-  final myProducts = List<String>.generate(1000, (i) => 'Product $i');
+    final controller2 = Get.put(SingltoneMazad());
 
-  int _counter = 0;
-  final messageInsert = TextEditingController();
-  List<Map> messsages = [];
+    void _incrementCounter() {
+      controller.count.value =   controller.count.value + 20;
+    }
 
-  void _incrementCounter() {
-    _counter = _counter + 29;
-  }
+    int i = 0;
 
-  int i = 0;
-
-  @override
-  build(BuildContext context) {
-    Duration clockTimer = Duration(seconds: animation.value);
-    String timerText =
-        '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
-
-    return Directionality(
+    return  Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Column(children: <Widget>[
+            body:
+            Obx(()=>  Column(children: <Widget>[
               ClipPath(
                 child: Container(
                   color: Themes.color,
@@ -91,13 +113,29 @@ class Countdown extends AnimatedWidget {
                                   backgroundColor: Themes.color2,
                                   child: Center(
                                     child: IconButton(
-                                      onPressed: () {
-                                        Get.back();
+                                      onPressed: () async{
+
+                                        if(controller.counter.value==0)
+                                        {
+                                          print("**************");
+                                          print(controller.count.value);
+                                          print(raise_id) ;
+                                          await AuthServices.EndRaise(
+                                            raise_id : raise_id,
+                                            price:controller.count.value,
+                                            token: await storage.read(key: 'token')
+
+                                          );
+                                          Get.back();
+
+
+                                        }
+                                        // controller2.disconnectPusher();
                                       },
                                       icon: Icon(
-                                       // MdiIcons.cameraRear,
-                                      //  MdiIcons.chevronLeft,
-                                         Icons.arrow_back,
+                                        // MdiIcons.cameraRear,
+                                        //  MdiIcons.chevronLeft,
+                                        Icons.arrow_back,
                                         color: Themes.color,
                                       ),
                                     ),
@@ -137,16 +175,15 @@ class Countdown extends AnimatedWidget {
                               "الوقت المتبقي",
                               style: Themes.headline3,
                             ),
-                            Text(
-                              "$timerText",
+                            Obx(() => Text(
+                              "${controller.counter.value}"+":00",
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.black,
-                              ),
+                              ),)
                             ),
                           ]),
                         )
-                        //   leading: CircleAvatar(radius:80,backgroundImage: AssetImage("images/2.jpg")),
                       ]),
                     ),
                   )),
@@ -156,185 +193,145 @@ class Countdown extends AnimatedWidget {
                   child: Container(
                       child: ListView.builder(
                           reverse: true,
-                          itemCount: messsages.length,
+                          itemCount: controller.messsages.length,
                           itemBuilder: (context, index) => mazad(
-                              messsages[index]["message"].toString(),
-                              messsages[index]["data"],timerText)))),
+                              controller.messsages[index]["name"].toString(),
+                              int.parse(controller.messsages[index]["number"].toString()),
+                              controller.messsages[index]["data"])))),
               Expanded(
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Container(
-                      child: timerText == "0:00"
+                      child: controller.counter.value== 0
                           ? Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Row(children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "المبلغ الحالي  ",
-                                    style: Themes.headline1,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "${_counter}",
-                                    style: TextStyle(
-                                        color: Themes.color, fontSize: 18),
-                                  ),
-                                ]),
-                              ),
-                            )
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Row(children: [
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "المبلغ الحالي  ",
+                              style: Themes.headline1,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Obx(() => Text(
+                              "${controller.count.value}",
+                              style: TextStyle(
+                                  color: Themes.color, fontSize: 18),
+                            ),)
+                          ]),
+                        ),
+                      )
                           : Row(children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  // borderRadius: BorderRadius.all(Radius.circular(
-                                  //   15)),
-                                  color: Colors.purple[50],
-                                ),
-                                child: Container(
-                                  color: Colors.grey.shade50,
-                                  child: Row(children: [
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(
-                                      "المبلغ الحالي  ",
-                                      style: Themes.headline1,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "${_counter}",
-                                      style: TextStyle(
-                                          color: Themes.color, fontSize: 18),
-                                    ),
-                                  ]),
-                                ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.all(Radius.circular(
+                            //   15)),
+                            color: Colors.purple[50],
+                          ),
+                          child: Container(
+                            color: Colors.grey.shade50,
+                            child: Row(children: [
+                              SizedBox(
+                                width: 20,
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                ),
-
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          _incrementCounter();
-                                        },
-                                        icon: Icon(
-                                          Icons.add_circle_outline_sharp,
-                                          color: Colors.grey.shade600,
-                                          size: 25,
-                                        ),
-                                      ),
-                                      IconButton(
-                                          icon: Icon(
-                                            Icons.send,
-                                            size: 25.0,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                          onPressed: () {
-                                            messsages.insert(0, {
-                                              "data": 0,
-                                              "message": _counter
-                                            });
-
-                                            messageInsert.clear();
-                                            i++;
-
-                                            FocusScopeNode currentFocus =
-                                                FocusScope.of(context);
-                                            if (!currentFocus.hasPrimaryFocus) {
-                                              currentFocus.unfocus();
-                                            }
-                                          }),
-                                    ]),
-
-                                //  Text("${_counter}"),
+                              Text(
+                                "المبلغ الحالي  ",
+                                style: Themes.headline1,
                               ),
-                            ])),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Obx(() =>Text(
+                                "${controller.count.value}",
+                                style: TextStyle(
+                                    color: Themes.color, fontSize: 18),
+                              ),)
+                            ]),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                          ),
+
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    _incrementCounter();
+                                  },
+                                  icon: Icon(
+                                    Icons.add_circle_outline_sharp,
+                                    color: Colors.grey.shade600,
+                                    size: 25,
+                                  ),
+                                ),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.send,
+                                      size: 25.0,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                    onPressed: () async {
+                                      controller.messsages.insert(0, {
+                                        "data": 0,
+                                        "name":controller.name.value,
+                                        "number":controller.count.value,
+                                      });
+                                      if(controller.counter.value!=0)
+
+                                        controller.counter.value=30;
+                                      i++;
+                                      await AuthServices.storeRaise(
+                                          raise_id : raise_id,
+                                          customer_id:(await storage.read(key: 'id')),
+                                          token: (await storage.read(key: 'token')),
+                                          number:controller.count.value
+
+                                      );
+
+
+                                      // else if(controller.counter.value==0)
+                                      //   {
+                                      //     print("))))))))))))))))))))))))))))))))))))))))))))))");
+                                      //     print(controller.count.value);
+                                      //     await AuthServices.EndRaise(
+                                      //         raise_id : 1,
+                                      //         price:controller.count.value,
+                                      //
+                                      //     );
+                                      //
+                                      //
+                                      //
+                                      //   }
+
+
+                                      FocusScopeNode currentFocus =
+                                      FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                    }),
+                              ]),
+
+                          //  Text("${_counter}"),
+                        ),
+                      ])),
                 ),
               ),
-            ])));
+            ]))));
   }
 
-  Widget mazad(String message, int data,String timerText) {
-     // var v=int.parse(timerText);
-     // v=30;
-    timerText="30";
-    print(timerText);
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
-      child: Card(
-        child: ListTile(
-          title: Text("بتول الزعبي"),
-          subtitle: Row(
-            mainAxisAlignment:
-                data == 1 ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              // data == 0 ? Container(
-              //   height: 60,
-              //   width: 60,
-              //   child: CircleAvatar(radius: 10,
-              //     backgroundImage: AssetImage("${controller.Images.value}"),
-              //   ),
-              // ) : Container(),
-
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Bubble(
-                    radius: Radius.circular(15.0),
-                    color: data == 0 ? Themes.color : Themes.color2,
-                    elevation: 0.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Flexible(
-                              child: Container(
-                            constraints: BoxConstraints(maxWidth: 200),
-                            child: Text(
-                              message,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ))
-                        ],
-                      ),
-                    )),
-              ),
-
-              // data == 1? Container(
-              //   height: 60,
-              //   width: 60,
-              //   child: CircleAvatar(radius: 10,
-              //     backgroundImage: AssetImage("images/3.jpg"),
-              //   ),
-              // ) : Container(),
-            ],
-          ),
-          leading: CircleAvatar(
-            radius: 40,
-            backgroundImage: AssetImage("images/jk.jpg"),
-          ),
-        ),
-      ),
-    );
-  }
 }
+
+

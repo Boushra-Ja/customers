@@ -28,22 +28,14 @@ class NotificationApi {
     await _notifications.initialize(
       setting,
       onSelectNotification: (payload) async {
-        onNotifications.add("");
+        onNotifications.add("hazabo");
       },
     );
-
-
-
-
   }
 
-  static Future showNotification(
-      {int id = 0, String? title, String? body, String? payload}) async =>
+  static Future showNotification({int id = 0, String? payload, String? title, String? body,}) async =>
       _notifications.show(id, title, body, await _notificationDetailes(),
           payload: payload);
-
-
-
 
 
 

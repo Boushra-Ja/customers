@@ -114,152 +114,111 @@ class EditOrder extends StatelessWidget {
                                 SizedBox(
                                   height: 40,
                                 ),
-                                // controller
-                                //     .selected_options[controller
-                                //     .order_products
-                                //     .elementAt(ind)
-                                //     .order_product_id]
-                                //     ?.length != null ? ListView.builder(
-                                //     shrinkWrap: true,
-                                //     physics: NeverScrollableScrollPhysics(),
-                                //     itemCount: controller
-                                //         .selected_options[controller
-                                //             .order_products
-                                //             .elementAt(ind)
-                                //             .order_product_id]
-                                //         ?.length,
-                                //     itemBuilder:
-                                //         (BuildContext context, int index) {
-                                //       return Padding(
-                                //         padding: const EdgeInsets.only(
-                                //             right: 20.0, bottom: 20, left: 20),
-                                //         child: Row(
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.start,
-                                //           children: [
-                                //             Expanded(
-                                //                 flex: 2,
-                                //                 child: Text(
-                                //                   "${controller.selected_options[controller.order_products.elementAt(ind).order_product_id]?.elementAt(index).name}",
-                                //                   style: Themes.bodyText1,
-                                //                 )),
-                                //             Expanded(
-                                //               flex: 3,
-                                //               child: Container(
-                                //                   height: 35,
-                                //                   child: GetBuilder<
-                                //                       EditOrderController>(
-                                //                     init: EditOrderController(
-                                //                         order_id , status_id),
-                                //                     builder:
-                                //                         (EditOrderController
-                                //                             controller) {
-                                //                       print(controller
-                                //                           .selected_options[
-                                //                               controller
-                                //                                   .order_products
-                                //                                   .elementAt(
-                                //                                       ind)
-                                //                                   .order_product_id]
-                                //                           ?.elementAt(index)
-                                //                           .value_id);
-                                //                       print(controller
-                                //                           .selected_options[
-                                //                               controller
-                                //                                   .order_products
-                                //                                   .elementAt(
-                                //                                       ind)
-                                //                                   .order_product_id]
-                                //                           ?.elementAt(index)
-                                //                           .value);
-                                //
-                                //                       return DropdownButtonFormField(
-                                //                         //  value: controller.selected_options.elementAt(index).value,
-                                //                         isDense: true,
-                                //                         autovalidateMode:
-                                //                             AutovalidateMode
-                                //                                 .onUserInteraction,
-                                //                         hint: Text("اختر"),
-                                //                         decoration: InputDecoration(
-                                //                             border: OutlineInputBorder(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         30)),
-                                //                             contentPadding:
-                                //                                 EdgeInsets
-                                //                                     .fromLTRB(
-                                //                                         10,
-                                //                                         0.001,
-                                //                                         12,
-                                //                                         0.001),
-                                //                             filled: true,
-                                //                             fillColor:
-                                //                                 Colors.white),
-                                //                         onChanged: (newValue) {
-                                //                           controller.change_value(
-                                //                               newValue,
-                                //                               controller
-                                //                                   .order_products
-                                //                                   .elementAt(
-                                //                                       ind)
-                                //                                   .order_product_id,
-                                //                               index);
-                                //                           print(controller
-                                //                               .selected_options[
-                                //                                   controller
-                                //                                       .order_products
-                                //                                       .elementAt(
-                                //                                           ind)
-                                //                                       .order_product_id]
-                                //                               ?.elementAt(index)
-                                //                               .value_id);
-                                //                         },
-                                //
-                                //                         items: controller
-                                //                             .options[
-                                //                                 controller
-                                //                                     .order_products
-                                //                                     .elementAt(
-                                //                                         ind)
-                                //                                     .product_id]
-                                //                                 ?[
-                                //                                 '${controller.selected_options[controller.order_products.elementAt(ind).order_product_id]?.elementAt(index).name}']
-                                //                             ?.map((item) {
-                                //                           // print("select" + controller.selected_options.elementAt(index).value) ;
-                                //                           // print("item " + item.value) ;
-                                //                           return DropdownMenuItem(
-                                //                             child: Text(
-                                //                               item.value,
-                                //                               textDirection:
-                                //                                   TextDirection
-                                //                                       .rtl,
-                                //                               textAlign:
-                                //                                   TextAlign
-                                //                                       .start,
-                                //                               style:
-                                //                                   const TextStyle(
-                                //                                 fontWeight:
-                                //                                     FontWeight
-                                //                                         .w300,
-                                //                                 color: Colors
-                                //                                     .black,
-                                //                               ),
-                                //                             ),
-                                //                             value: item,
-                                //                           );
-                                //                         }).toList(),
-                                //                       );
-                                //                     },
-                                //                   )),
-                                //             ),
-                                //             Expanded(
-                                //               flex: 1,
-                                //               child: Text(""),
-                                //             )
-                                //           ],
-                                //         ),
-                                //       );
-                                //     }) : SizedBox.shrink(),
+                                controller.order_products.elementAt(ind).selected_option
+                                    .length > 0  ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: controller.order_products.elementAt(ind).selected_option
+                                        .length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 20.0, bottom: 20, left: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "${controller.order_products.elementAt(ind).options.keys
+                                                      .elementAt(index)}",
+                                                  style: Themes.bodyText1,
+                                                )),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Container(
+                                                  height: 35,
+                                                  child: GetBuilder<
+                                                      EditOrderController>(
+                                                    init: EditOrderController(
+                                                        order_id , status_id),
+                                                    builder:
+                                                        (EditOrderController
+                                                            controller) {
+
+                                                      return DropdownButtonFormField(
+                                                       // value: controller.order_products.elementAt(ind).selected_option.elementAt(index),
+                                                        isDense: true,
+                                                        autovalidateMode:
+                                                            AutovalidateMode
+                                                                .onUserInteraction,
+                                                        hint: Text("${controller.order_products.elementAt(ind).selected_option.elementAt(index)}"),
+                                                        decoration: InputDecoration(
+                                                            border: OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        30)),
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .fromLTRB(
+                                                                        10,
+                                                                        0.001,
+                                                                        12,
+                                                                        0.001),
+                                                            filled: true,
+                                                            fillColor:
+                                                                Colors.white),
+                                                        onChanged: (newValue) {
+                                                          controller.change_value(
+                                                              newValue,
+                                                              controller
+                                                                  .order_products
+                                                                  .elementAt(
+                                                                      ind)
+                                                                  .order_product_id,
+                                                              index , ind);
+                                                        },
+
+                                                        items: controller.order_products.elementAt(ind)
+                                                            .options[
+                                                        '${controller.order_products.elementAt(ind).options.keys
+                                                            .elementAt(index)}']?.map((item) {
+                                                           return DropdownMenuItem(
+                                                            child: Text(
+                                                              item.value,
+                                                              textDirection:
+                                                                  TextDirection
+                                                                      .rtl,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            value: item,
+                                                          );
+                                                        }).toList(),
+                                                      );
+                                                    },
+                                                  )),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(""),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }) : SizedBox.shrink(),
 
                                 Padding(
                                   padding: const EdgeInsets.only(
@@ -335,7 +294,6 @@ class EditOrder extends StatelessWidget {
                                             onChanged: (value) {
                                               controller.setchexkboxValue(
                                                   value.toString() , ind);
-                                              print(controller. order_products.elementAt(ind).gift_order);
 
                                             },
                                             groupValue: controller.order_products.elementAt(ind).gift_order,
@@ -355,7 +313,6 @@ class EditOrder extends StatelessWidget {
                                                 onChanged: (val) {
                                                   controller.setchexkboxValue(
                                                       val.toString() , ind);
-                                                  print(controller. order_products.elementAt(ind).gift_order);
                                                 }) ;
                                           }) ,
                                           SizedBox(width: 5),
@@ -380,12 +337,7 @@ class EditOrder extends StatelessWidget {
                                     Expanded(
                                       child: MaterialButton(
                                         onPressed: () async {
-                                          // await controller.edit_options(
-                                          //     controller.order_products
-                                          //         .elementAt(ind)
-                                          //         .order_product_id);
-
-                                          await controller.edit_order_product(ind) ;
+                                          await controller.edit_order_product(ind ) ;
                                         },
                                         shape: RoundedRectangleBorder(
                                             borderRadius:

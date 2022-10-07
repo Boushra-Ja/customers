@@ -1,8 +1,4 @@
 import 'dart:developer';
-
-import 'package:bubble/bubble.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:pusher_client/pusher_client.dart';
@@ -10,7 +6,7 @@ import 'package:pusher_client/pusher_client.dart';
 import '../../../main.dart';
 import '../Chats/ChatDetailsController.dart';
 
-class SingltonePusher  extends GetxController{
+class SingltonePusher  {
 
   static final SingltonePusher _SingltonePusher =
   SingltonePusher._internal();
@@ -37,7 +33,7 @@ class SingltonePusher  extends GetxController{
 
   void subscribePusher(receiver_id) {
     final controller = Get.put(ChatDetailsController());
-
+    // controller.i.value=controller.i.value+1;
     print("=====sender=======rceiver=========");
     print(sender_id.value);
     print(receiver_id);
@@ -55,12 +51,14 @@ class SingltonePusher  extends GetxController{
       print(data);
       if (last.data != null) {
 
+        controller.i.value=controller.i.value+1;
 
         print("00000088880000000000");
         print(data['message']);
+        print(controller.i.value);
         print("0000000888000000000");
 
-       controller.messsages.insert(
+        controller.messsages.insert(
             0 , {
           "data": 1,
           "message": data['message']
@@ -90,10 +88,10 @@ class SingltonePusher  extends GetxController{
   inti(receiver_id) async {
     sender_id.value=(await storage.read(key: 'id'))!;
 
-       print("one...");
-       print(receiver_id);
-       print(sender_id.value);
-       print("one...");
+    print("one...");
+    print(receiver_id);
+    print(sender_id.value);
+    print("one...");
 
     SingltonePusher().initPusher();
     SingltonePusher().connectPusher();

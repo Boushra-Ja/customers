@@ -214,7 +214,7 @@ class ProductDeatilController extends GetxController{
 
   void addTo_Basket()async{
 
-    ShoppingBasket orderProduct =  ShoppingBasket(product_id: product_id, store_id: product.store_id, store_name: product.store_name,
+    ShoppingBasket orderProduct =  ShoppingBasket(product_id: product.id, store_id: product.store_id, store_name: product.store_name,
         store_image: product.store_image, delivery_time: "", order_time: "", product_name: product.product_name, product_image: product.image, gift_order: 'no', amount: 1 , selling_price: product.selling_price , discount_id: product.discount_id , discount_value: product.discount_value);
 
     var l = ShoppingBasket.serialize(orderProduct) ;

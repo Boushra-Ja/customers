@@ -111,6 +111,7 @@ class TreatBasketController extends GetxController {
 
   ///boshra
   Future<void> storage_options(int ind) async {
+
     for (int i = 0; i < maplist.elementAt(ind).selected_values.length; i++) {
       final response =
       await http.post(Uri.parse('${MyApp.api}/api/option_product'),
@@ -122,7 +123,7 @@ class TreatBasketController extends GetxController {
           body: jsonEncode(<String, int>{
             "order_product_id": maplist.elementAt(ind).order_prodcut_id,
             "option_values_id":
-            maplist.elementAt(0).selected_values.elementAt(i),
+            maplist.elementAt(ind).selected_values.elementAt(i),
           }));
 
       if (response.statusCode == 200) {
